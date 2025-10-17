@@ -346,9 +346,6 @@ For questions or issues with this automation framework, please refer to:
 - Screenshots in `screenshots/`
 - This README for setup instructions
 
-## 📄 License
-
-This project is created for assessment purposes.
 
 ---
 
