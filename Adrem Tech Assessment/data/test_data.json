@@ -1,0 +1,45 @@
+{
+  "user_credentials": {
+    "email": "testuser_automation_2024@example.com",
+    "password": "TestPass@123",
+    "first_name": "John",
+    "last_name": "Doe"
+  },
+  "billing_address": {
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "testuser_automation_2024@example.com",
+    "company": "Test Automation Inc",
+    "country": "United States",
+    "city": "New York",
+    "address1": "123 Test Street",
+    "address2": "Apt 4B",
+    "zip_code": "10001",
+    "phone": "5551234567"
+  },
+  "shipping_address": {
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "testuser_automation_2024@example.com",
+    "company": "Test Automation Inc",
+    "country": "United States",
+    "city": "New York",
+    "address1": "123 Test Street",
+    "address2": "Apt 4B",
+    "zip_code": "10001",
+    "phone": "5551234567"
+  },
+  "products_to_search": [
+    "laptop",
+    "book",
+    "smartphone"
+  ],
+  "test_config": {
+    "base_url": "https://demowebshop.tricentis.com/",
+    "implicit_wait": 10,
+    "explicit_wait": 20,
+    "browser": "chrome",
+    "headless": false
+  }
+}
+

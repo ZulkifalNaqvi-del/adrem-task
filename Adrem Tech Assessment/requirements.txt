@@ -1,0 +1,19 @@
+# Core Selenium and WebDriver
+selenium==4.27.1
+webdriver-manager==4.0.2
+
+# Testing Framework
+pytest==8.3.3
+pytest-html==4.1.1
+pytest-metadata==3.1.1
+pytest-xdist==3.6.1
+
+# Test Data Generation
+Faker==30.3.0
+
+# Logging
+colorlog==6.8.2
+
+# Allure Reporting (Optional)
+allure-pytest==2.13.5
+
