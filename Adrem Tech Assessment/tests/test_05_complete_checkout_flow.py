@@ -22,14 +22,14 @@ class TestCompleteCheckoutFlow:
         Test Step: Complete end-to-end checkout flow
         Steps:
         0. Register new user
-        1. Login with credentials
-        2. Search and add multiple products to cart
-        3. Navigate to cart and validate items
-        4. Proceed to checkout
-        5. Fill billing/shipping address
-        6. Select shipping and payment methods
-        7. Confirm order
-        8. Validate order completion
+        1. Logout after registration
+        2. Login with newly created credentials
+        3. Search and add multiple products to cart
+        4. Navigate to cart and validate items
+        5. Proceed to checkout
+        6. Fill billing/shipping address
+        7. Select shipping and payment methods
+        8. Confirm order and validate order completion
         
         Expected: Order placed successfully with confirmation message
         """
@@ -89,38 +89,69 @@ class TestCompleteCheckoutFlow:
             )
             raise
         
-        # Step 1: Verify login (or login if needed)
-        logger.info("STEP 1: Verify user is logged in")
+        # Step 1: Logout after registration
+        logger.info("STEP 1: Logout after registration")
         timer = StepTimer()
         timer.start()
         try:
-            if not login_page.is_logged_in():
-                logger.info("User not logged in after registration, logging in now")
-                login_success = login_page.login(credentials['email'], credentials['password'])
-                assert login_success, "Login failed"
+            # First check if user is logged in after registration
+            if login_page.is_logged_in():
+                logout_success = login_page.logout()
+                assert logout_success, "Logout failed"
+                logger.info("✓ User logged out successfully")
+            else:
+                logger.warning("User was not logged in after registration")
+            
             timer.stop()
             csv_reporter.add_step(
                 step_number=1,
-                step_name="User Login Verification",
+                step_name="Logout After Registration",
                 status="SUCCESS",
                 duration=timer.get_duration(),
-                details=f"User logged in: {credentials['email']}"
+                details="User logged out successfully after registration"
             )
-            logger.info("✓ User is logged in")
         except Exception as e:
             timer.stop()
             csv_reporter.add_step(
                 step_number=1,
-                step_name="User Login Verification",
+                step_name="Logout After Registration",
                 status="FAILED",
                 duration=timer.get_duration(),
-                details="Failed to verify user login",
+                details="Failed to logout after registration",
                 error_message=str(e)
             )
             raise
         
-        # Step 2: Add multiple products to cart
-        logger.info("STEP 2: Add multiple products to cart")
+        # Step 2: Login with newly created credentials
+        logger.info("STEP 2: Login with newly created credentials")
+        timer = StepTimer()
+        timer.start()
+        try:
+            login_success = login_page.login(credentials['email'], credentials['password'])
+            assert login_success, "Login with newly created credentials failed"
+            timer.stop()
+            csv_reporter.add_step(
+                step_number=2,
+                step_name="Login with New Credentials",
+                status="SUCCESS",
+                duration=timer.get_duration(),
+                details=f"Successfully logged in with new credentials: {credentials['email']}"
+            )
+            logger.info(f"✓ User logged in successfully with new credentials: {credentials['email']}")
+        except Exception as e:
+            timer.stop()
+            csv_reporter.add_step(
+                step_number=2,
+                step_name="Login with New Credentials",
+                status="FAILED",
+                duration=timer.get_duration(),
+                details=f"Failed to login with new credentials: {credentials['email']}",
+                error_message=str(e)
+            )
+            raise
+        
+        # Step 3: Add multiple products to cart
+        logger.info("STEP 3: Add multiple products to cart")
         timer = StepTimer()
         timer.start()
         added_count = 0
@@ -147,7 +178,7 @@ class TestCompleteCheckoutFlow:
             assert added_count > 0, "Failed to add any products to cart"
             timer.stop()
             csv_reporter.add_step(
-                step_number=2,
+                step_number=3,
                 step_name="Add Products to Cart",
                 status="SUCCESS",
                 duration=timer.get_duration(),
@@ -157,7 +188,7 @@ class TestCompleteCheckoutFlow:
         except Exception as e:
             timer.stop()
             csv_reporter.add_step(
-                step_number=2,
+                step_number=3,
                 step_name="Add Products to Cart",
                 status="FAILED",
                 duration=timer.get_duration(),
@@ -166,8 +197,8 @@ class TestCompleteCheckoutFlow:
             )
             raise
         
-        # Step 3: Navigate to cart and validate
-        logger.info("STEP 3: Navigate to cart and validate items")
+        # Step 4: Navigate to cart and validate
+        logger.info("STEP 4: Navigate to cart and validate items")
         timer = StepTimer()
         timer.start()
         
@@ -191,7 +222,7 @@ class TestCompleteCheckoutFlow:
             
             timer.stop()
             csv_reporter.add_step(
-                step_number=3,
+                step_number=4,
                 step_name="Cart Validation",
                 status="SUCCESS",
                 duration=timer.get_duration(),
@@ -201,7 +232,7 @@ class TestCompleteCheckoutFlow:
         except Exception as e:
             timer.stop()
             csv_reporter.add_step(
-                step_number=3,
+                step_number=4,
                 step_name="Cart Validation",
                 status="FAILED",
                 duration=timer.get_duration(),
@@ -210,8 +241,8 @@ class TestCompleteCheckoutFlow:
             )
             raise
         
-        # Step 4: Proceed to checkout
-        logger.info("STEP 4: Proceed to checkout")
+        # Step 5: Proceed to checkout
+        logger.info("STEP 5: Proceed to checkout")
         timer = StepTimer()
         timer.start()
         
@@ -219,7 +250,7 @@ class TestCompleteCheckoutFlow:
             cart_page.proceed_to_checkout()
             timer.stop()
             csv_reporter.add_step(
-                step_number=4,
+                step_number=5,
                 step_name="Proceed to Checkout",
                 status="SUCCESS",
                 duration=timer.get_duration(),
@@ -229,7 +260,7 @@ class TestCompleteCheckoutFlow:
         except Exception as e:
             timer.stop()
             csv_reporter.add_step(
-                step_number=4,
+                step_number=5,
                 step_name="Proceed to Checkout",
                 status="FAILED",
                 duration=timer.get_duration(),
@@ -238,8 +269,8 @@ class TestCompleteCheckoutFlow:
             )
             raise
         
-        # Step 5: Fill billing address
-        logger.info("STEP 5: Fill billing address")
+        # Step 6: Fill billing address
+        logger.info("STEP 6: Fill billing address")
         timer = StepTimer()
         timer.start()
         
@@ -248,7 +279,7 @@ class TestCompleteCheckoutFlow:
             checkout_page.click_billing_continue()
             timer.stop()
             csv_reporter.add_step(
-                step_number=5,
+                step_number=6,
                 step_name="Fill Billing Address",
                 status="SUCCESS",
                 duration=timer.get_duration(),
@@ -258,7 +289,7 @@ class TestCompleteCheckoutFlow:
         except Exception as e:
             timer.stop()
             csv_reporter.add_step(
-                step_number=5,
+                step_number=6,
                 step_name="Fill Billing Address",
                 status="FAILED",
                 duration=timer.get_duration(),
@@ -267,8 +298,8 @@ class TestCompleteCheckoutFlow:
             )
             raise
         
-        # Step 6: Complete checkout flow (shipping, payment, confirm)
-        logger.info("STEP 6-7: Complete checkout flow (shipping, payment, confirm)")
+        # Step 7: Complete checkout flow (shipping, payment, confirm)
+        logger.info("STEP 7: Complete checkout flow (shipping, payment, confirm)")
         timer = StepTimer()
         timer.start()
         
@@ -283,7 +314,7 @@ class TestCompleteCheckoutFlow:
             
             timer.stop()
             csv_reporter.add_step(
-                step_number=6,
+                step_number=7,
                 step_name="Complete Checkout (Shipping, Payment, Confirm)",
                 status="SUCCESS",
                 duration=timer.get_duration(),
@@ -293,7 +324,7 @@ class TestCompleteCheckoutFlow:
         except Exception as e:
             timer.stop()
             csv_reporter.add_step(
-                step_number=6,
+                step_number=7,
                 step_name="Complete Checkout (Shipping, Payment, Confirm)",
                 status="FAILED",
                 duration=timer.get_duration(),
@@ -302,8 +333,8 @@ class TestCompleteCheckoutFlow:
             )
             raise
         
-        # Step 7: Validate order completion
-        logger.info("STEP 7: Validate order completion")
+        # Step 8: Validate order completion
+        logger.info("STEP 8: Validate order completion")
         timer = StepTimer()
         timer.start()
         
@@ -322,7 +353,7 @@ class TestCompleteCheckoutFlow:
             
             timer.stop()
             csv_reporter.add_step(
-                step_number=7,
+                step_number=8,
                 step_name="Order Completion Validation",
                 status="SUCCESS",
                 duration=timer.get_duration(),
@@ -332,7 +363,7 @@ class TestCompleteCheckoutFlow:
         except Exception as e:
             timer.stop()
             csv_reporter.add_step(
-                step_number=7,
+                step_number=8,
                 step_name="Order Completion Validation",
                 status="FAILED",
                 duration=timer.get_duration(),
